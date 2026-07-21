@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E.T. Señor de Quinuapata S.A.C. - Oficial</title>
+    <!-- Iconos Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- VARIABLES DE DISEÑO (Colores Oficiales) --- */
+        :root {
+            --primary: #FFCC00;     /* Amarillo Principal */
+            --secondary: #DC3545;   /* Rojo de Detalles */
+            --dark: #111111;        /* Negro Corporal */
+            --dark-light: #1A1A1A;  /* Negro Suave para Tarjetas */
+            --light: #F9F9F9;       /* Fondo Claro */
+            --text-dark: #222222;
+            --text-muted: #666666;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* --- ESTILOS GENERALES --- */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Poppins', sans-serif; scroll-behavior: smooth;
+        }
+        body { background-color: var(--light); color: var(--text-dark); overflow-x: hidden; }
+        
+        /* --- PANTALLA DE BIENVENIDA (LOADER) --- */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--dark); display: flex; flex-direction: column;
+            justify-content: center; align-items: center; z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+        .spinner {
+            width: 60px; height: 60px; border: 5px solid #333;
+            border-top-color: var(--primary); border-radius: 50%;
+            animation: spin 1s linear infinite; margin-bottom: 20px;
+        }
+        #loader p { color: #fff; font-weight: 500; letter-spacing: 1px; font-size: 14px; text-align: center; padding: 0 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* --- ENCABEZADO Y NAVEGACIÓN --- */
+        header {
+            background: var(--dark); position: fixed; width: 100%; top: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2); border-bottom: 3px solid var(--primary);
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; display: flex;
+            justify-content: space-between; align-items: center; padding: 10px 20px;
+        }
+        .logo-container {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .logo-img {
+            height: 45px; width: auto; object-fit: contain;
+        }
+        .logo-text {
+            color: #fff; font-size: 16px; font-weight: 700; display: flex; flex-direction: column; line-height: 1.2;
+        }
+        .logo-text span { color: var(--primary); }
+        
+        .nav-menu { display: flex; list-style: none; gap: 15px; }
+        .nav-menu a {
+            color: #fff; text-decoration: none; font-weight: 500; font-size: 14px;
+            padding: 8px 12px; border-radius: 4px; transition: var(--transition);
+        }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--dark); background: var(--primary); }
+        .menu-toggle { display: none; color: #fff; font-size: 24px; cursor: pointer; }
+
+        /* --- PORTADA / HERO --- */
+        .hero {
+            height: 90vh; min-height: 500px; margin-top: 68px;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.85)), url('img/moto5.jpg') center/cover no-repeat;
+            display: flex; align-items: center; justify-content: center; text-align: center; color: #fff; padding: 0 20px;
+        }
+        .hero-content { max-width: 850px; }
+        .hero-content h1 { font-size: 40px; font-weight: 700; margin-bottom: 15px; line-height: 1.2; }
+        .hero-content h1 span { color: var(--primary); }
+        .hero-content p { font-size: 16px; margin-bottom: 30px; color: #e0e0e0; font-weight: 300; }
+        .hero-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        
+        /* BOTONES */
+        .btn {
+            padding: 12px 25px; border-radius: 30px; font-weight: 600; text-decoration: none;
+            display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); font-size: 14px;
+        }
+        .btn-yellow { background: var(--primary); color: var(--dark); }
+        .btn-yellow:hover { background: #fff; transform: translateY(-3px); }
+        .btn-outline { border: 2px solid #fff; color: #fff; }
+        .btn-outline:hover { background: #fff; color: var(--dark); transform: translateY(-3px); }
+
+        /* --- ESTILOS DE SECCIÓN GENERAL --- */
+        section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+        .section-title { text-align: center; margin-bottom: 45px; font-size: 28px; font-weight: 700; position: relative; }
+        .section-title::after {
+            content: ''; display: block; width: 50px; height: 4px; background: var(--secondary); margin: 8px auto 0; border-radius: 2px;
+        }
+
+        /* --- NOSOTROS --- */
+        .about-text { font-size: 15px; line-height: 1.7; text-align: justify; color: var(--text-muted); margin-bottom: 40px; }
+        .mv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .mv-card { background: #fff; padding: 35px 25px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); }
+        .mv-card i { font-size: 35px; color: var(--secondary); margin-bottom: 15px; }
+        .mv-card h3 { margin-bottom: 10px; font-size: 20px; }
+        .mv-card p { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+        /* --- VALORES Y POR QUÉ ELEGIRNOS --- */
+        .bg-dark-section { background-color: var(--dark); color: #fff; max-width: 100%; }
+        .bg-dark-section .section-title { color: #fff; }
+        .valores-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 50px; }
+        .valor-card { background: var(--dark-light); padding: 25px 20px; text-align: center; border-radius: 6px; border-bottom: 3px solid transparent; transition: var(--transition); }
+        .valor-card:hover { border-bottom-color: var(--primary); transform: translateY(-5px); }
+        .valor-card i { font-size: 30px; color: var(--primary); margin-bottom: 12px; }
+        .valor-card h4 { font-size: 16px; margin-bottom: 8px; }
+        .valor-card p { font-size: 13px; color: #aaa; }
+
+        .choose-container { max-width: 800px; margin: 0 auto; background: rgba(255,255,255,0.05); padding: 30px; border-radius: 8px; }
+        .choose-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; }
+        .choose-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #e0e0e0; }
+        .choose-item i { color: var(--primary); font-size: 16px; }
+
+        /* --- SERVICIOS --- */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        .service-card {
+            background: #fff; padding: 35px 20px; text-align: center; border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03); transition: var(--transition); border-top: 4px solid var(--dark);
+        }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-top-color: var(--primary); }
+        .service-card i { font-size: 40px; color: var(--secondary); margin-bottom: 15px; }
+        .service-card h3 { font-size: 18px; margin-bottom: 10px; }
+        .service-card p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+
+        /* --- TARIFARIO Y REQUISITOS --- */
+        .tarifario-box { max-width: 700px; margin: 0 auto 50px; background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .table-responsive { overflow-x: auto; }
+        .elegant-table { width: 100%; border-collapse: collapse; min-width: 400px; }
+        .elegant-table th { background: var(--dark); color: #fff; padding: 12px; text-align: left; font-size: 14px; }
+        .elegant-table td { padding: 14px 12px; border-bottom: 1px solid #eee; font-size: 14px; }
+        .elegant-table tr:hover { background-color: rgba(255,204,0,0.08); }
+        
+        .observaciones { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px; margin-top: 20px; }
+        .observaciones h5 { font-size: 14px; margin-bottom: 5px; color: #856404; }
+        .observaciones ul { list-style-position: inside; font-size: 13px; color: #856404; }
+
+        .join-box { background: #fff; padding: 35px; border-radius: 8px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-top: 40px; }
+        .join-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-top: 20px; }
+        .req-list li, .perm-list li { list-style: none; font-size: 13.5px; margin-bottom: 10px; display: flex; align-items: flex-start; gap: 8px; }
+        .req-list i { color: green; margin-top: 3px; }
+        .perm-list i { color: var(--secondary); margin-top: 3px; }
+        .inf-box { background: var(--dark); color: #fff; padding: 20px; text-align: center; border-radius: 6px; margin-top: 20px; }
+        .inf-box a { color: var(--primary); font-size: 20px; font-weight: 700; text-decoration: none; }
+
+        /* --- REGLAMENTO --- */
+        .rules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .rule-card { background: #fff; padding: 25px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.04); }
+        .rule-card h3 { font-size: 16px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #eee; padding-bottom: 8px; }
+        .rule-card ul { list-style: none; }
+        .rule-card li { font-size: 13px; margin-bottom: 8px; color: var(--text-muted); display: flex; align-items: flex-start; gap: 6px; }
+        .rule-card li::before { content: "•"; color: var(--secondary); font-weight: bold; }
+
+        /* --- COMPROMISO --- */
+        .compromiso-container { max-width: 800px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .comp-item { background: #fff; padding: 20px; border-radius: 6px; display: flex; align-items: center; gap: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .comp-item i { font-size: 24px; color: var(--primary); }
+        .comp-item p { font-size: 14px; font-weight: 500; }
+
+        /* --- PREGUNTAS FRECUENTES (FAQ) --- */
+        .faq-container { max-width: 750px; margin: 0 auto; }
+        .faq-item { background: #fff; margin-bottom: 12px; border-radius: 6px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.03); }
+        .faq-question { padding: 18px 20px; background: #fff; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; font-size: 14px; transition: var(--transition); user-select: none; }
+        .faq-question:hover { background: #f0f0f0; }
+        .faq-answer { padding: 0 20px; max-height: 0; overflow: hidden; transition: all 0.3s ease-out; color: var(--text-muted); font-size: 13.5px; line-height: 1.6; }
+        .faq-item.active .faq-answer { padding: 15px 20px 20px; max-height: 200px; border-top: 1px solid #f0f0f0; }
+        .faq-question i { transition: var(--transition); }
+        .faq-item.active .faq-question i { transform: rotate(180deg); color: var(--secondary); }
+
+        /* --- GALERÍA FOTOGRÁFICA --- */
+        .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 15px; margin-bottom: 40px; }
+        .galeria-item { height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; }
+        .galeria-item img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+        .galeria-item:hover img { transform: scale(1.08); }
+
+        /* --- MAPA DE UBICACIÓN --- */
+        .map-container { border-radius: 8px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background: #eee; height: 350px; display: flex; justify-content: center; align-items: center; text-align: center; }
+        .map-container iframe { width: 100%; height: 100%; border: 0; }
+
+        /* --- BOTONES FLOTANTES --- */
+        .floating-actions { position: fixed; bottom: 20px; right: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 2000; }
+        .btn-float { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #fff; font-size: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: var(--transition); text-decoration: none; }
+        .btn-float:hover { transform: scale(1.1); }
+        .float-wsp { background: #25D366; }
+        .float-call { background: #007BFF; }
+        .float-top { background: var(--dark); display: none; border: 1px solid var(--primary); }
+
+        /* --- PIE DE PÁGINA (FOOTER) --- */
+        footer { background: var(--dark); color: #fff; padding: 50px 20px 20px; border-top: 4px solid var(--primary); }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; padding-bottom: 30px; border-bottom: 1px solid #222; }
+        .footer-block h4 { font-size: 16px; margin-bottom: 15px; color: var(--primary); }
+        .footer-block p, .footer-block li { font-size: 13px; color: #ccc; line-height: 1.6; margin-bottom: 8px; list-style: none; }
+        .footer-block i { color: var(--primary); margin-right: 6px; }
+        .footer-bottom { text-align: center; padding-top: 20px; font-size: 12px; color: #777; }
+
+        /* --- RENDER ANIMADO SCROLL --- */
+        .scroll-reveal { opacity: 0; transform: translateY(35px); transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+        .scroll-reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- RESPONSIVO --- */
+        @media (max-width: 768px) {
+            .nav-menu { position: absolute; top: 100%; left: -100%; width: 100%; background: var(--dark); flex-direction: column; padding: 20px; text-align: center; transition: var(--transition); box-shadow: 0 10px 15px rgba(0,0,0,0.2); }
+            .nav-menu.active { left: 0; }
+            .menu-toggle { display: block; }
+            .hero-content h1 { font-size: 28px; }
+            .hero-content p { font-size: 14px; }
+            section { padding: 50px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de Bienvenida Inicial -->
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>E.T. SEÑOR DE QUINUAPATA S.A.C.</p>
+    </div>
+
+    <!-- Menú Superior Principal -->
+    <header>
+        <div class="nav-container">
+            <div class="logo-container">
+                <img src="img/logo.png" alt="Logotipo" class="logo-img" onerror="this.style.display='none'">
+                <div class="logo-text">E.T. SEÑOR DE <span>QUINUAPATA</span></div>
+            </div>
+            <i class="fa-solid fa-bars menu-toggle" id="menu-btn"></i>
+            <ul class="nav-menu" id="nav-links">
+                <li><a href="#inicio" class="active">Inicio</a></li>
+                <li><a href="#nosotros">Nosotros</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#tarifario">Tarifario</a></li>
+                <li><a href="#normas">Reglamento</a></li>
+                <li><a href="#faq">Preguntas</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Portada (Sección Inicio) -->
+    <section class="hero" id="inicio" style="max-width:100%;">
+        <div class="hero-content">
+            <h1>Bienvenidos a la Empresa de Transportes <span>Señor de Quinuapata S.A.C.</span></h1>
+            <p>Más que un viaje, brindamos seguridad, confianza y puntualidad en cada recorrido. Servicio urbano rápido y formal en la provincia de Chupaca.</p>
+            <div class="hero-buttons">
+                <a href="#tarifario" class="btn btn-yellow"><i class="fa-solid fa-money-bill-wave"></i> Ver Tarifario</a>
+                <a href="#servicios" class="btn btn-outline"><i class="fa-solid fa-boxes-stacked"></i> Nuestros Servicios</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nosotros (Historia, Misión y Visión) -->
+    <section id="nosotros" class="scroll-reveal">
+        <h2 class="section-title">Nuestra Historia</h2>
+        <p class="about-text">
+            La <strong>Empresa de Transportes Señor de Quinuapata S.A.C.</strong> es una organización dedicada al rubro del transporte público urbano, constituida legalmente bajo la premisa de ofrecer soluciones eficientes de movilidad. El nombre institucional rinde homenaje a la profunda identidad comunitaria y fe que caracteriza a nuestro equipo de trabajo, integrando además la denominación de sus raíces operacionales en Manchay.<br><br>
+            Con el objetivo de descentralizar un servicio de calidad, la organización expandió su cobertura formal hacia la región Junín, estableciendo una sede sólida en la provincia de Chupaca para atender de manera prioritaria la ruta Chupaca – Vista Alegre. Actualmente, la empresa dispone de una flota moderna de vehículos autorizados, donde el color amarillo reglamentario y el logotipo institucional en el parabrisas marcan nuestro sello de formalidad y orden ante toda la población.
+        </p>
+        <div class="mv-grid">
+            <div class="mv-card">
+                <i class="fa-solid fa-bullseye"></i>
+                <h3>Misión</h3>
+                <p>Brindar un servicio de transporte urbano en mototaxi rápido, seguro y confiable en Chupaca. Buscamos ofrecer un trato amable y personalizado, garantizando el bienestar de los pasajeros en vehículos óptimos y con conductores capacitados.</p>
+            </div>
+            <div class="mv-card">
+                <i class="fa-solid fa-eye"></i>
+                <h3>Visión</h3>
+                <p>Ser la empresa de mototaxis líder y referente en calidad, seguridad y formalización en toda la provincia de Chupaca, reconocida por nuestra puntualidad, el respeto a las normas de tránsito y el desarrollo social.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Valores Corporativos y Atributos (Fondo Oscuro) -->
+    <section class="bg-dark-section scroll-reveal">
+        <h2 class="section-title">Valores Institucionales</h2>
+        <div class="valores-grid">
+            <div class="valor-card">
+                <i class="fa-solid fa-shield-halved"></i>
+                <h4>Seguridad</h4>
+                <p>Proteger la vida y bienestar del usuario.</p>
+            </div>
+            <div class="valor-card">
+                <i class="fa-solid fa-clock"></i>
+                <h4>Puntualidad</h4>
+                <p>Respetar el tiempo de nuestros clientes.</p>
+            </div>
+            <div class="valor-card">
+                <i class="fa-solid fa-handshake-angle"></i>
+                <h4>Respeto</h4>
+                <p>Atención cordial y amable en cada ruta.</p>
+            </div>
+            <div class="valor-card">
+                <i class="fa-solid fa-id-card"></i>
+                <h4>Formalidad</h4>
+                <p>Cumplimiento estricto de las normas.</p>
+            </div>
+        </div>
+
+        <div class="choose-container">
+            <h3 style="text-align: center; margin-bottom: 20px; font-size: 18px; color: var(--primary);">¿Por qué elegirnos?</h3>
+            <div class="choose-grid">
+                <div class="choose-item"><i class="fa-solid fa-circle-check"></i> Conducción formal e identificada.</div>
+                <div class="choose-item"><i class="fa-solid fa-circle-check"></i> Mototaxis limpias y mecánicamente óptimas.</div>
+                <div class="choose-item"><i class="fa-solid fa-circle-check"></i> Documentación (SOAT/AFOCAT) al día.</div>
+                <div class="choose-item"><i class="fa-solid fa-circle-check"></i> Tarifas accesibles y transparentes.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestros Servicios -->
+    <section id="servicios" class="scroll-reveal">
+        <h2 class="section-title">Nuestros Servicios</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <h3>Traslados Urbanos</h3>
+                <p>Rutas ágiles hacia mercados, paraderos, bancos, hospitales y colegios de la ciudad.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-box-open"></i>
+                <h3>Delivery y Encomiendas</h3>
+                <p>Transporte rápido y seguro de tus paquetes, documentos y compras diarias.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <h3>Transporte Escolar</h3>
+                <p>Traslado de ida y vuelta con máxima precaución para los estudiantes de la casa.</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-moon"></i>
+                <h3>Servicio Nocturno</h3>
+                <p>Movilidad segura durante la noche con conductores debidamente empadronados.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tarifario e Inscripciones -->
+    <section id="tarifario" class="scroll-reveal">
+        <h2 class="section-title">Tarifas e Incorporaciones</h2>
+        
+        <div class="tarifario-card">
+  <div class="tarifario-header">
+    <small>E.T. SEÑOR DE QUINUAPATA MANCHAY S.A.C.</small>
+    <h2>TARIFARIO OFICIAL</h2>
+  </div>
+
+  <!-- Pasaje Colectivo -->
+  <div class="banner-colectivo">
+    <div class="colectivo-title">PASAJE COLECTIVO DÍA</div>
+    <div class="colectivo-horario">6:00 am - 7:00 pm</div>
+    <div class="colectivo-ruta">
+      <span>CHUPACA - VISTA ALEGRE</span>
+      <span class="precio-destacado">S/ 1.00</span>
+    </div>
+  </div>
+
+  <!-- Servicio Rápido Table -->
+  <div class="servicio-rapido-container">
+    <div class="rapido-header">
+      SERVICIO RÁPIDO DÍA (6:00 AM - 7:00 PM)
+    </div>
+    
+    <table class="tarifario-tabla">
+      <thead>
+        <tr>
+          <th>DESTINO / RUTA</th>
+          <th>1 PASAJERO</th>
+          <th>3 PASAJEROS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Chupaca - Vista Alegre <small>(Paradero 4)</small></td>
+          <td>S/ 2.00</td>
+          <td>S/ 3.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Vista Alegre <small>(Paradero 5)</small></td>
+          <td>S/ 2.50</td>
+          <td>S/ 3.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Vista Alegre <small>(Paradero 6)</small></td>
+          <td>S/ 3.00</td>
+          <td>S/ 3.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Colegio <small>(Vista Alegre)</small></td>
+          <td>S/ 3.00</td>
+          <td>S/ 3.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Cementerio <small>(Vista Alegre)</small></td>
+          <td>S/ 6.00</td>
+          <td>S/ 6.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Las Lomas</td>
+          <td>S/ 4.00</td>
+          <td>S/ 4.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - 9 de Octubre</td>
+          <td>S/ 3.00</td>
+          <td>S/ 3.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Lecheros</td>
+          <td>S/ 4.00</td>
+          <td>S/ 4.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Los Eucaliptos</td>
+          <td>S/ 3.00</td>
+          <td>S/ 3.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - El Portón</td>
+          <td>S/ 5.00</td>
+          <td>S/ 5.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Común <small>(La Era)</small></td>
+          <td>S/ 3.00</td>
+          <td>S/ 3.00</td>
+        </tr>
+        <tr>
+          <td>Chupaca - Puzo <small>(Mate)</small></td>
+          <td>S/ 6.00</td>
+          <td>S/ 6.00</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Avisos / Pie de Tarifario -->
+  <div class="banner-aviso">
+    NIÑOS MAYORES DE 5 AÑOS PAGAN SU PASAJE
+  </div>
+
+  <ul class="tarifario-notas">
+    <li>El pasaje tendrá un incremento pasado el horario establecido.</li>
+    <li>El servicio tendrá un incremento del <strong>50% en DÍAS FESTIVOS</strong> (28 y 29 de Julio, 24, 25, 31 de Diciembre y 01 de Enero).</li>
+    <li>Servicio a más distancia: precio a tratar entre cliente y conductor.</li>
+  </ul>
+
+  <div class="tarifario-contacto">
+    📞 Quejas y Sugerencias: <strong>995696905</strong>
+  </div>
+</div>
+
+<style>
+  .tarifario-card {
+    max-width: 650px;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    background: #ffffff;
+    color: #333333;
+  }
+  .tarifario-header {
+    background-color: #1a252f;
+    color: #ffffff;
+    text-align: center;
+    padding: 16px;
+  }
+  .tarifario-header small {
+    font-size: 11px;
+    color: #bdc3c7;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .tarifario-header h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #f39c12;
+  }
+  .banner-colectivo {
+    background-color: #f1c40f;
+    color: #1c2833;
+    padding: 14px;
+    text-align: center;
+  }
+  .colectivo-title {
+    font-weight: 800;
+    font-size: 18px;
+  }
+  .colectivo-horario {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .colectivo-ruta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    max-width: 85%;
+    margin: 0 auto;
+  }
+  .precio-destacado {
+    color: #c0392b;
+    font-size: 18px;
+  }
+  .servicio-rapido-container {
+    padding: 15px;
+  }
+  .rapido-header {
+    background: #c0392b;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 6px 6px 0 0;
+    font-size: 14px;
+  }
+  .tarifario-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .tarifario-tabla th {
+    background-color: #e74c3c;
+    color: white;
+    padding: 8px;
+    font-size: 11px;
+    text-align: center;
+  }
+  .tarifario-tabla th:first-child {
+    text-align: left;
+    padding-left: 12px;
+  }
+  .tarifario-tabla td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #eeeeee;
+  }
+  .tarifario-tabla tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  .tarifario-tabla td:nth-child(2),
+  .tarifario-tabla td:nth-child(3) {
+    text-align: center;
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  .tarifario-tabla small {
+    color: #e74c3c;
+  }
+  .banner-aviso {
+    background-color: #f39c12;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    padding: 8px;
+    font-size: 13px;
+    margin: 0 15px 10px 15px;
+    border-radius: 4px;
+  }
+  .tarifario-notas {
+    margin: 0 15px 15px 15px;
+    padding-left: 20px;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+  }
+  .tarifario-contacto {
+    background-color: #f4f6f7;
+    text-align: center;
+    padding: 10px;
+    font-size: 13px;
+    border-top: 1px solid #e0e0e0;
+    color: #2c3e50;
+  }
+</style>
+
+        <!-- Únete a la Empresa -->
+        <div class="join-box">
+            <h3 style="text-align:center; color: var(--dark); font-size: 22px;">¿Deseas unirte a nuestra flota?</h3>
+            <p style="text-align:center; font-size:14px; color: var(--text-muted); margin-bottom: 25px;">Si tienes una mototaxi en excelente estado, postula cumpliendo las siguientes directrices:</p>
+            
+            <div class="join-grid">
+                <div>
+                    <h4 style="margin-bottom:12px; font-size:15px; color: var(--secondary);"><i class="fa-solid fa-file-invoice"></i> Requisitos</h4>
+                    <ul class="req-list">
+                        <li><i class="fa-solid fa-check"></i> Licencia de conducir vigente y DNI.</li>
+                        <li><i class="fa-solid fa-check"></i> Tarjeta de circulación de Chupaca.</li>
+                        <li><i class="fa-solid fa-check"></i> SOAT o AFOCAT vigente de la unidad.</li>
+                        <li><i class="fa-solid fa-check"></i> Vehículo operativo en excelente estado mecánico.</li>
+                        <li><i class="fa-solid fa-check"></i> Abono de inscripción y gastos administrativos.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:12px; font-size:15px; color: var(--secondary);"><i class="fa-solid fa-scale-balanced"></i> Permanencia</h4>
+                    <ul class="perm-list">
+                        <li><i class="fa-solid fa-circle-exclamation"></i> Respetar de forma estricta las tarifas del tarifario oficial.</li>
+                        <li><i class="fa-solid fa-circle-exclamation"></i> Mantener limpieza integral interna y externa del vehículo.</li>
+                        <li><i class="fa-solid fa-circle-exclamation"></i> Acatar el reglamento interno y las normas de tránsito nacionales.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="inf-box">
+                <p style="font-size: 13px; margin-bottom: 5px;">Para solicitudes y evaluaciones de ingreso llama al:</p>
+                <a href="tel:+51995696905">995 696 905</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reglamento Interno de Trabajo -->
+    <section id="normas" class="scroll-reveal">
+        <h2 class="section-title">Normas de la Empresa</h2>
+        <div class="rules-grid">
+            <div class="rule-card">
+                <h3><i class="fa-solid fa-shield"></i> Seguridad Vial</h3>
+                <ul>
+                    <li>Tolerancia cero al consumo de alcohol.</li>
+                    <li>Límite estricto de velocidad permitido.</li>
+                    <li>Límite de capacidad: máximo 3 pasajeros adultos.</li>
+                    <li>Uso prioritario de paraderos autorizados.</li>
+                </ul>
+            </div>
+            <div class="rule-card">
+                <h3><i class="fa-solid fa-face-smile"></i> Servicio al Cliente</h3>
+                <ul>
+                    <li>Trato cordial, amable y con respeto prioritario.</li>
+                    <li>Cobro exacto del tarifario vigente.</li>
+                    <li>Identificación de la unidad visible en todo momento.</li>
+                    <li>Asistencia a gestantes, ancianos y discapacitados.</li>
+                </ul>
+            </div>
+            <div class="rule-card">
+                <h3><i class="fa-solid fa-wrench"></i> Control Técnico</h3>
+                <ul>
+                    <li>Limpieza técnica diaria del vehículo.</li>
+                    <li>Revisión preventiva de frenos, luces y dirección.</li>
+                    <li>Logotipo institucional visible en el parabrisas.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Compromiso Institucional -->
+    <section class="scroll-reveal" style="background:#f0f0f0; max-width:100%;">
+        <div style="max-width:1200px; margin: 0 auto;">
+            <h2 class="section-title">Nuestro Compromiso</h2>
+            <div class="compromiso-container">
+                <div class="comp-item"><i class="fa-solid fa-user-shield"></i> <p>Transporte plenamente seguro para Chupaca.</p></div>
+                <div class="comp-item"><i class="fa-solid fa-heart"></i> <p>Atención amable, empática y respetuosa.</p></div>
+                <div class="comp-item"><i class="fa-solid fa-building-columns"></i> <p>Fomento del transporte urbano formal en la provincia.</p></div>
+                <div class="comp-item"><i class="fa-solid fa-chart-line"></i> <p>Mejora e innovación continua en el servicio diario.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Preguntas Frecuentes (FAQ) -->
+    <section id="faq" class="scroll-reveal">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">¿Por qué la tarifa puede cambiar o ser mayor a la del tarifario? <i class="fa-solid fa-chevron-down"></i></div>
+                <div class="faq-answer"> La tarifa regular solo aplica de 6:00 a.m. a 7:00 p.m. El costo del pasaje puede ser mayor si viajas fuera de ese horario (tarifa nocturna), en días festivos (incremento del 50%), o si pides ir a una ubicación fuera de la ruta establecida.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">¿La empresa se hace responsable por pertenencias olvidadas? <i class="fa-solid fa-chevron-down"></i></div>
+                <div class="faq-answer">No. Cada pasajero debe revisar y cuidar sus objetos personales antes de descender del vehículo. La empresa no se hace responsable por pérdidas, pero brindamos apoyo para contactar al conductor.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">¿Cómo puedo identificar que subí a una unidad oficial de la empresa? <i class="fa-solid fa-chevron-down"></i></div>
+                <div class="faq-answer">Todas nuestras unidades autorizadas cuentan con la identificación visible de E.T. SEÑOR DE QUINUAPATA MANCHAY S.A.C., número de flota y el tarifario oficial pegado al interior.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galería y Ubicación -->
+    <section class="scroll-reveal">
+        <h2 class="section-title">Galería y Ubicación</h2>
+        <div class="galeria-grid">
+            <div class="galeria-item"><img src="img/moto1.jpeg" alt="Unidad Quinuapata 1" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=400'"></div>
+            <div class="galeria-item"><img src="img/moto2.jpeg" alt="Unidad Quinuapata 2" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=400'"></div>
+            <div class="galeria-item"><img src="img/moto3.jpeg" alt="Unidad Quinuapata 3" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=400'"></div>
+            <div class="galeria-item"><img src="img/moto4.jpeg" alt="Unidad Quinuapata 4" onerror="this.src='https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?q=80&w=400'"></div>
+        </div>
+        
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15603.203403164104!2d-75.29548485!3d-12.0572352!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x910e97cd2b2913e7%3A0xc3cf374249a21d60!2sChupaca!5e0!3m2!1ses-419!2spe!4v1710000000000!5m2!1ses-419!2spe" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </section>
+
+    <!-- Formulario de Contacto Informativo -->
+    <section id="contacto" class="scroll-reveal" style="max-width:600px; background:#fff; padding:40px; border-radius:8px; box-shadow:0 4px 20px rgba(0,0,0,0.05); margin-bottom: 80px;">
+        <h2 class="section-title" style="margin-bottom:25px;">Canal de Consultas</h2>
+        <div style="text-align:center; font-size:14px; line-height:1.6;">
+            <p><i class="fa-solid fa-phone" style="color:var(--secondary)"></i> <strong>Teléfono Central:</strong> 995 696 905</p>
+            <p><i class="fa-solid fa-clock" style="color:var(--primary)"></i> <strong>Horario de Operación:</strong> 6:00 a.m. – 7:00 p.m.</p>
+            <p><i class="fa-solid fa-location-dot" style="color:var(--dark)"></i> <strong>Sede Operativa:</strong> Chupaca - Junín - Perú</p>
+        </div>
+    </section>
+
+    <!-- Botones Flotantes Permanentes (Móvil/Web) -->
+    <div class="floating-actions">
+        <a href="https://wa.me/51995696905" class="btn-float float-wsp" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="tel:+51995696905" class="btn-float float-call"><i class="fa-solid fa-phone"></i></a>
+        <a href="#" class="btn-float float-top" id="toTopBtn"><i class="fa-solid fa-arrow-up"></i></a>
+    </div>
+
+    <!-- Pie de Página Fijo -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-block">
+                <h4>E.T. Señor de Quinuapata Manchay S.A.C.</h4>
+                <p>Empresa líder en transporte urbano formal de mototaxis en la provincia de Chupaca, Junín.</p>
+            </div>
+            <div class="footer-block">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="#inicio" style="color: #ccc; text-decoration: none;">Inicio</a></li>
+                    <li><a href="#nosotros" style="color: #ccc; text-decoration: none;">Nosotros</a></li>
+                    <li><a href="#servicios" style="color: #ccc; text-decoration: none;">Servicios</a></li>
+                    <li><a href="#contacto" style="color: #ccc; text-decoration: none;">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-block">
+                <h4>Contacto</h4>
+                <p><i class="fa-solid fa-phone"></i> 995 696 905</p>
+                <p><i class="fa-solid fa-location-dot"></i> Chupaca, Junín, Perú</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 E.T. Señor de Quinuapata Manchay S.A.C. Todos los derechos reservados.
+        </div>
+    </footer>
+
+    <!-- --- SCRIPTS DE JAVASCRIPT --- -->
+    <script>
+        // 1. Ocultar la pantalla de carga (Loader) al finalizar de cargar la página
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.visibility = 'hidden';
+            }, 500);
+        });
+
+        // 2. Control del Menú Desplegable Móvil (Hamburguesa)
+        const menuBtn = document.getElementById('menu-btn');
+        const navLinks = document.getElementById('nav-links');
+        const links = document.querySelectorAll('.nav-menu a');
+
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            menuBtn.classList.toggle('fa-xmark'); // Cambia el icono a una 'X' al abrir
+        });
+
+        // Cerrar el menú al hacer clic en un enlace
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuBtn.classList.remove('fa-xmark');
+                menuBtn.classList.add('fa-bars');
+                
+                // Cambiar clase activa en los enlaces
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        // 3. Sistema Accordion para las Preguntas Frecuentes (FAQ)
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Cierra los demás antes de abrir el actual
+                faqItems.forEach(i => i.classList.remove('active'));
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // 4. Animación Scroll Reveal (Aparición de secciones al bajar)
+        const revealSections = document.querySelectorAll('.scroll-reveal');
+
+        const revealOnScroll = () => {
+            const triggerBottom = window.innerHeight * 0.85;
+            revealSections.forEach(section => {
+                const sectionTop = section.getBoundingClientRect().top;
+                if (sectionTop < triggerBottom) {
+                    section.classList.add('visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Ejecución inicial para las que ya están visibles
+
+        // 5. Botón Flotante para Volver al Inicio (To Top)
+        const toTopBtn = document.getElementById('toTopBtn');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 400) {
+                toTopBtn.style.display = 'flex';
+            } else {
+                toTopBtn.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
